@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>PHPメールフォーム・マニュアル</title>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://bootswatch.com/lumen/bootstrap.min.css">
+<link href="./php_mailform/css/parts.css" rel="stylesheet">
+<link href="./php_mailform/css/php_mailform.css" rel="stylesheet">
+<link href="./php_mailform/css/sample.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Khand" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+</head>
+
+<body class="bg_manual">
+
+<div class="container">
+
+<div class="row">
+	<div class="col-sm-9">
+		<h1 class="h2 logo"><i class="fa fa-envelope" aria-hidden="true"></i> php mailform  <span class="version_mini">Version 1.08</span></h1>
+	</div>
+	<div class="col-sm-3">
+		<div class="mt20"><a class="navi_link" href="http://econosys-system.com/freesoft/php_mailform.html" target="_blank"><i class="fa fa-download" aria-hidden="true"></i> Download</a></div>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-xs-12">
+	<h1 class="h3 lc01">PHPメールフォーム設置マニュアル</h1>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-xs-12 manual">
+
+
+
+<!-- [markdown_text] -->
+<div id="md_text" style="display: none;" class="hidden-xs">
+
+# <i class="fa fa-cube" aria-hidden="true"></i> php mailformのライセンス
+php mailform はフリーソフトです。（MITライセンス）<br>
+MITライセンスのもと、どなたでも自由に仕様、改変、再配布することができます。<br>
+
+
+<br>
+# <i class="fa fa-cube" aria-hidden="true"></i> php mailformの設置方法
+
+mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」フォルダが生成されます。<br>
+**1.**「php_mailform」フォルダごとお使いのWEBサーバにFTPアップロードします。<br>
+**2.** ファイル「php_mailform/phplib/mailform/config.yml」のパーミッションを <b>600</b> にします。<br>
+**3.** ブラウザに　http://設置したサーバー名/php_mailform/php_mailform.php と入力してアクセスします。<br>
+<br>
+
+
+<br>
+# <i class="fa fa-cube" aria-hidden="true"></i> php mailformの設定方法
+
+ファイルをアップロードしただけでは使用できません。設定ファイルを開いて適宜設定を変更して下さい。<br>
+<b>設定ファイル「php_mailform/phplib/mailform/config.yml」</b><br>
+**1.** config.ymlの【メールの設定】項目を設定して下さい。<br>
+**2.** config.ymlの【フォームの設定】項目を設定して下さい。<br>
+<br>
+設定が完了した config.yml はサーバ上のものと置き換えて下さい。
+
+
+
+<br>
+# <i class="fa fa-cube" aria-hidden="true"></i> フォーム項目の設定方法（ config.yml フォームの設定）
+
+フォームの設定は以下のようになっています。適宜書き換えて下さい。不要な入力項目は項目自体を削除して下さい。
+```
+  name :
+    title_mail : お名前
+    title_html : お名前 ※
+    placeholder: 問い合わせ　太郎
+    input_type : text # text, number, email, tel, password, select, checkbox, textarea, radio, file から選択。
+    validate   :
+      NOT_BLANK  : お名前を入力してください。
+
+  postal :
+    title_mail : 郵便番号
+    title_html : 郵便番号
+    placeholder: 123-4567
+    class      : p-postal-code
+    input_type : number # text, number, email, tel, password, select, checkbox, textarea, radio, file から選択。
+    validate   :
+      REGEX,^[0-9\-０-９−―-]+$ : 郵便番号を正しく入力してください。
+
+  address :
+    title_mail : 住所
+    title_html : 住所
+    placeholder: 住所
+    class      : p-region p-locality p-street-address p-extended-address
+    input_type : text # text, number, email, tel, password, select, checkbox, textarea, radio, file から選択。
+    validate   :
+```
+
+###● フォーム項目を必須項目にするには下記を追加して下さい。
+```
+    validate   :
+      NOT_BLANK  : お名前を入力してください。
+```
+
+
+| 項目名 | 説明 |
+|:-----------|:------------|
+| title_mail |ユーザーまたは管理者に送信されるメールの項目タイトル |
+| title_html |ユーザーまたは管理者に送信されるメールの項目タイトル |
+| placeholder|フォームが未入力の時に表示するテキスト |
+| class      |CSSクラス |
+| input_type |フォームの種類を選択 |
+| validate   |フォームの入力値チェックを選択|
+
+
+
+<br>
+# <i class="fa fa-cube" aria-hidden="true"></i> php mailformの動作の概要
+
+メールフォームの画面は3画面です。動作の流れは以下の通りとなります。
+
+#### 1.メールフォーム入力画面
+<pre>
+・/php_mailform/phplib/mailform/templates/<b>mail_form.html</b>（画面全体のデザイン）（Smartyテンプレート）
+・/php_mailform/phplib/mailform/templates/table.html（フォーム要素テーブル）（Smartyテンプレート）
+</pre>
+
+　　<b>↓</b><br>
+#### 2.メールフォーム確認画面
+<pre>
+・/php_mailform/phplib/mailform/templates/<b>mail_form_confirm.html</b>（画面全体のデザイン）（Smartyテンプレート）
+・/php_mailform/phplib/mailform/templates/table_confirm.html（フォーム要素テーブル）（Smartyテンプレート）
+</pre>
+
+　　<b>↓</b><br>
+#### 3.メールフォーム送信完了画面
+<pre>
+・php_mailform/php_mailform_end.html（htmlファイル）
+</pre>
+
+
+
+<br>
+#  <i class="fa fa-cube" aria-hidden="true"></i> お問合せ
+本ソフトウェアについての質問・バグ報告・要望などございましたら<br>
+<a class="md" href="http://econosys-system.com/contact.php">こちらのお問い合わせフォーム</a>からなんなりとお問い合わせ下さい。
+<br><br><br><br><br>
+</div>
+<!-- [markdown_text] -->
+
+
+<script>
+var text = document.getElementById('md_text').innerHTML;
+var md   = marked(text);
+document.write(md);
+</script>
+
+	</div>
+</div>
+
+
+
+	<footer>
+	<div class="row">
+	<div class="col-sm-12">
+	<div class="mb50 pull-right"><a class="lc01" href="http://econosys-system.com/freesoft/php_mailform.html" target="_blank">php mailform (c) 2017 econosys system</a></div>
+	</div>
+	</div>
+	</footer>
+
+</div>
+
+</body>
+</html>
+
