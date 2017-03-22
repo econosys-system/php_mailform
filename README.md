@@ -1,10 +1,10 @@
-# <i class="fa fa-cube" aria-hidden="true"></i> php mailformのライセンス
+# ● php mailformのライセンス
 php mailform はフリーソフトです。（MITライセンス）<br>
 MITライセンスのもと、どなたでも自由に仕様、改変、再配布することができます。<br>
 
 
 <br>
-# <i class="fa fa-cube" aria-hidden="true"></i> php mailformの設置方法
+# ● php mailformの設置方法
 
 mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」フォルダが生成されます。<br>
 **1.**「php_mailform」フォルダごとお使いのWEBサーバにFTPアップロードします。<br>
@@ -14,7 +14,7 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
 
 
 <br>
-# <i class="fa fa-cube" aria-hidden="true"></i> php mailformの設定方法
+# ● php mailformの設定方法
 
 ファイルをアップロードしただけでは使用できません。設定ファイルを開いて適宜設定を変更して下さい。<br>
 <b>設定ファイル「php_mailform/phplib/mailform/config.yml」</b><br>
@@ -26,7 +26,7 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
 
 
 <br>
-# <i class="fa fa-cube" aria-hidden="true"></i> フォーム項目の設定方法（ config.yml フォームの設定）
+# ● フォーム項目の設定方法（ config.yml フォームの設定）
 
 フォームの設定は以下のようになっています。適宜書き換えて下さい。不要な入力項目は項目自体を削除して下さい。
 ```
@@ -75,7 +75,7 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
 
 
 <br>
-# <i class="fa fa-cube" aria-hidden="true"></i> php mailformの動作の概要
+# ● php mailformの動作の概要
 
 メールフォームの画面は3画面です。動作の流れは以下の通りとなります。
 
@@ -101,6 +101,10 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
 
 
 <br>
-#  <i class="fa fa-cube" aria-hidden="true"></i> お問合せ
+#  ● お問合せ
 本ソフトウェアについての質問・バグ報告・要望などございましたら<br>
 <a class="md" href="http://econosys-system.com/contact.php">こちらのお問い合わせフォーム</a>からなんなりとお問い合わせ下さい。
+
+#  ● 公式サイト
+[php_mailform](http://econosys-system.com/freesoft/php_mailform.html)
+
