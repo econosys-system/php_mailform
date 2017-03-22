@@ -11,6 +11,7 @@
 // Version 1.05  ：subject文字化けのbug-fix
 // Version 1.07  ：細かいbug-fix
 // Version 1.08  ：do_confirm() の細かいbug-fix
+// Version 1.09  ：notice表示の削除
 
 
 require_once dirname(__FILE__).'/../flatframe.php';
@@ -299,7 +300,7 @@ class ff_mailform extends flatframe
         $mailtext = mb_convert_encoding($mailtext, 'ISO-2022-JP', 'UTF-8');
 
         // 添付ファイルがある場合はmime
-        if (is_array($mix['attach_file'])) {
+        if (is_array( @$mix['attach_file'] )) {
             require_once 'Mail/mime.php';
             $mime = new Mail_Mime("\n");  //改行コードをセット
             $mime->setTxtBody($mailtext);
