@@ -2,7 +2,7 @@
 
 /*
 	exfileupload2.php
-	copyright (c)2002-2016 econosys system
+	copyright (c)2002-2017 econosys system
 	http://econosys-system.com/
 
 	The MIT License (MIT)

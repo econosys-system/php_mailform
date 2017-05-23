@@ -12,6 +12,7 @@
 // Version 1.07  ：細かいbug-fix
 // Version 1.08  ：do_confirm() の細かいbug-fix
 // Version 1.09  ：notice表示の削除
+// Version 1.10  ：一部のメールヘッダ修正
 
 
 require_once dirname(__FILE__).'/../flatframe.php';
@@ -266,6 +267,8 @@ class ff_mailform extends flatframe
             if (strcmp($key, 'subject') == 0) {
                 $headers['Subject'] = mb_encode_mimeheader($mix['subject'],'ISO-2022-JP');
             } elseif (strcmp($key, 'to') == 0) {
+            } elseif (strcmp($key, 'replyto') == 0) {
+                $headers['Reply-To'] = $value;
             } elseif (strcmp($key, 'mailtext') == 0) {
             } elseif (strcmp($key, 'attach_file') == 0) {
             } else {
