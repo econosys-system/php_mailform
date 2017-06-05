@@ -1,27 +1,27 @@
 # ● php mailformのライセンス
-php mailform はフリーソフトです。（MITライセンス）
+php mailform はフリーソフトです。（MITライセンス）  
 MITライセンスのもと、どなたでも自由に仕様、改変、再配布することができます。
 
 
 
 # ● php mailformの設置方法
 
-mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」フォルダが生成されます。
-**1.**「php_mailform」フォルダごとお使いのWEBサーバにFTPアップロードします。
-**2.** ファイル「php_mailform/phplib/mailform/config.yml」のパーミッションを <b>600</b> にします。
-**3.** ブラウザに　http://設置したサーバー名/php_mailform/php_mailform.php と入力してアクセスします。
+mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」フォルダが生成されます。  
+**1.**「php_mailform」フォルダごとお使いのWEBサーバにFTPアップロードします。  
+**2.** ファイル「php_mailform/phplib/mailform/config.yml」のパーミッションを <b>600</b> にします。  
+**3.** ブラウザに　http://設置したサーバー名/php_mailform/php_mailform.php と入力してアクセスします。  
 
 
 
 
 # ● php mailformの設定方法
 
-ファイルをアップロードしただけでは使用できません。設定ファイルを開いて適宜設定を変更して下さい。
-<b>設定ファイル「php_mailform/phplib/mailform/config.yml」</b>
-**1.** config.ymlの【メールの設定】項目を設定して下さい。
-**2.** config.ymlの【フォームの設定】項目を設定して下さい。
-
-設定が完了した config.yml はサーバ上のものと置き換えて下さい。
+ファイルをアップロードしただけでは使用できません。設定ファイルを開いて適宜設定を変更して下さい。  
+<b>設定ファイル「php_mailform/phplib/mailform/config.yml」</b>  
+**1.** config.ymlの【メールの設定】項目を設定して下さい。  
+**2.** config.ymlの【フォームの設定】項目を設定して下さい。  
+  
+設定が完了した config.yml はサーバ上のものと置き換えて下さい。  
 
 
 
@@ -29,6 +29,7 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
 # ● フォーム項目の設定方法（ config.yml フォームの設定）
 
 フォームの設定は以下のようになっています。適宜書き換えて下さい。不要な入力項目は項目自体を削除して下さい。
+
 ```
   name :
     title_mail : お名前
@@ -56,12 +57,6 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
     validate   :
 ```
 
-###● フォーム項目を必須項目にするには下記を追加して下さい。
-```
-    validate   :
-      NOT_BLANK  : お名前を入力してください。
-```
-
 
 | 項目名 | 説明 |
 |:-----------|:------------|
@@ -74,28 +69,63 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
 
 
 
+###● フォーム項目を必須項目にするには下記を追加して下さい。
+
+・1行テキストや複数行テキストを入力必須にする
+
+```
+    validate   :
+      NOT_BLANK  : お名前を入力してください。
+```
+  
+         
+    
+  
+・チェックボックスやラジオボタンを入力必須にする
+
+```
+    validate   :
+            CHECKBOX_NOT_BLANK: お問合せの種類を選択してください。
+```
+
+エラーメッセージは適宜書き換えてください。  
+
+
+
+###● フォーム項目の必須項目をやめて任意入力項目にするには次の行を削除して下さい
+
+```
+      NOT_BLANK  : お名前を入力してください。
+```
+(↑ この上の1行を削除すると任意入力項目となります)
+
+
+
+
+
+
 
 # ● php mailformの動作の概要
 
 メールフォームの画面は3画面です。動作の流れは以下の通りとなります。
-
-#### 1.メールフォーム入力画面
+テンプレートファイルは（/php_mailform/phplib/mailform/templates/）にあります
+### 1.メールフォーム入力画面
 <pre>
-・/php_mailform/phplib/mailform/templates/<b>mail_form.html</b>（画面全体のデザイン）（Smartyテンプレート）
-・/php_mailform/phplib/mailform/templates/table.html（フォーム要素テーブル）（Smartyテンプレート）
+・<b>mail_form.html</b>（画面全体のデザイン）（Smartyテンプレート）
+・table.html（フォーム要素テーブル）（Smartyテンプレート）
 </pre>
 
 　　<b>↓</b>
-#### 2.メールフォーム確認画面
+### 2.メールフォーム確認画面
 <pre>
-・/php_mailform/phplib/mailform/templates/<b>mail_form_confirm.html</b>（画面全体のデザイン）（Smartyテンプレート）
-・/php_mailform/phplib/mailform/templates/table_confirm.html（フォーム要素テーブル）（Smartyテンプレート）
+・<b>mail_form_confirm.html</b>（画面全体のデザイン）（Smartyテンプレート）
+・table_confirm.html（フォーム要素テーブル）（Smartyテンプレート）
 </pre>
 
 　　<b>↓</b>
-#### 3.メールフォーム送信完了画面
+### 3.メールフォーム送信完了画面
 <pre>
-・php_mailform/php_mailform_end.html（htmlファイル）
+・php_mailform_end.html（htmlファイル）
 </pre>
 
 

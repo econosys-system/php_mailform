@@ -13,6 +13,7 @@
 // Version 1.08  ：do_confirm() の細かいbug-fix
 // Version 1.09  ：notice表示の削除
 // Version 1.10  ：一部のメールヘッダ修正
+// Version 1.11  ：css崩れ,複数添付ファイル送信時のバグを修正
 
 
 require_once dirname(__FILE__).'/../flatframe.php';
@@ -93,7 +94,7 @@ class ff_mailform extends flatframe
         require_once 'exvalidator.php';
         $validate_array = array();
         foreach ($this->_ff_config['form'] as $k => $v) {
-            if ($v['validate']) {
+            if ( @$v['validate'] ) {
                 $validate_array['form'][$k] = $v['validate'];
             }
         }
@@ -201,7 +202,7 @@ class ff_mailform extends flatframe
 
         $validate_array = array();
         foreach ($this->_ff_config['form'] as $k => $v) {
-            if ($v['validate']) {
+            if ( @$v['validate'] ) {
                 $validate_array['form'][$k] = $v['validate'];
             }
         }

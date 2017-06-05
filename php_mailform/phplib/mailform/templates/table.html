@@ -33,11 +33,11 @@
 </select>
 { elseif $v.input_type == "textarea"}<textarea name="{ $k|escape }" {if $v.class }class="{ $v.class|escape }"{ /if } placeholder="{ $v.placeholder|escape }"></textarea>
 { elseif $v.input_type == "file"}
-<p id="mail_form_attach_label" class="btn btn-default" onClick="$('#mail_form_attach_file').click();">
+<p id="{ $k }_label" class="btn btn-default" onClick="$('#{ $k }_file').click();">
 { $v.placeholder|escape }
 </p>
-<input id="mail_form_attach_filename" readonly type="text" >
-<input id="mail_form_attach_file" type="file" name="{ $k|escape }" {if $v.class }class="{ $v.class|escape }"{ /if } onchange="$('#mail_form_attach_filename').val( $(this)[0].files[0].name )">
+<input id="{ $k }_filename" readonly type="text" >
+<input id="{ $k }_file" type="file" name="{ $k|escape }" {if $v.class }class="{ $v.class|escape }"{ /if } onchange="$('#{ $k }_filename').val( $(this)[0].files[0].name )">
 { elseif $v.input_type == "text"}<input type="text" name="{ $k|escape }" {if $v.class }class="{ $v.class|escape }"{ /if } placeholder="{ $v.placeholder|escape }">
 { else }<input type="{ $v.input_type }" name="{ $k|escape }" {if $v.class }class="{ $v.class|escape }"{ /if } placeholder="{ $v.placeholder|escape }">
 { /if }
@@ -49,8 +49,8 @@
 <li class="row">
 <div class="{ $row1_class_name|escape }"></div>
 <div class="{ $row2_class_name|escape }">
-	<input type="button" value="戻る" class="btn mr10" onclick="history.back();">
-	<input type="submit" value="入力内容確認" class="btn btn-success">
+	<p class="mt10"><input type="submit" value="入力内容確認" class="btn btn-success"></p>
+	<p class="mt15"><input type="button" value="戻る" class="btn" onclick="history.back();"></p>
 </div>
 </li>
 </ul>
@@ -58,7 +58,10 @@
 </form>
 { if $yubinbango_js }<script src="https://yubinbango.github.io/yubinbango/yubinbango.js" charset="UTF-8"></script>
 { /if }
+
 <script>
-  {$js_text}
+
+{$js_text}
+
 </script>
 <!-- [table.html] -->
