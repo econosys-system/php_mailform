@@ -155,13 +155,6 @@ input[type="number"] {
 	padding: 5px 10px
 }
 
-.contents__form_list dd,.contents__form_list dt {
-	display: block;
-	float: left;
-	padding: 7px 15px;
-	min-height: 36px
-}
-
 .contents__form_list ::-webkit-input-placeholder {
 	color: #ddd
 }
@@ -172,17 +165,34 @@ input[type="number"] {
 	line-height: 1.1
 }
 
-.contents__form_list dt {
-	width: 30%
-}
-
-.contents__form_list dd {
-	width: 70%
-}
-
 input[type="text"]:focus ,input[type="number"]:focus , input[type="email"]:focus , input[type="tel"]:focus , input[type="password"]:focus , textarea:focus {
   border: 1px solid #aaa;
   background: white;
   outline: 0;
   transition-duration: 300ms;
 }
+
+
+
+dl,dt,dd {
+  box-sizing: border-box;
+}
+dt {
+	padding: 7px 0px 7px 15px;
+}
+dd {
+	padding: 7px 15px 7px 15px;
+}
+dt {
+  width: 30%;
+  float: left;
+}
+dd {
+  margin-left: 30%;
+}
+dd:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+

@@ -1,5 +1,5 @@
 
-<!-- ff_mailform.php 　The MIT License  (c)2017 econosys system  http://econosys-system.com/ -->
+<!-- ff_mailform.php 　The MIT License  (c)2018 econosys system  https://econosys-system.com/ -->
 <!-- [table.html] -->
 <div id="mail_form_error">
 { if $result}下記のエラーがあります。
@@ -33,9 +33,10 @@
 </select>
 { elseif $v.input_type == "textarea"}<textarea name="{ $k|escape }" {if $v.class }class="{ $v.class|escape }"{ /if } placeholder="{ $v.placeholder|escape }"></textarea>
 { elseif $v.input_type == "file"}
-<p id="{ $k }_label" class="btn btn-default" onClick="$('#{ $k }_file').click();">
+<button type="button" id="{ $k }_label" class="btn btn-secondary mb3" onClick="$('#{ $k }_file').click(); return false;">
 { $v.placeholder|escape }
-</p>
+</button>
+<br>
 <input id="{ $k }_filename" readonly type="text" >
 <input id="{ $k }_file" type="file" name="{ $k|escape }" {if $v.class }class="{ $v.class|escape }"{ /if } onchange="$('#{ $k }_filename').val( $(this)[0].files[0].name )">
 { elseif $v.input_type == "text"}<input type="text" name="{ $k|escape }" {if $v.class }class="{ $v.class|escape }"{ /if } placeholder="{ $v.placeholder|escape }">

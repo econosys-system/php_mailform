@@ -7,6 +7,7 @@
 
     The MIT License (MIT)
 
+
     Version 0.100 PHP5.3エラー表示対応
     Version 0.110 use_path_info:1 の時 PATH_INFO から cmdを生成
     Version 0.111 use_path_info:1 の時 fub-fix
@@ -22,9 +23,7 @@
     Version 0.30  PHP7対応
     Version 0.31  PHP7対応のbug-fix
     Version 0.32  ドキュメント修正
-    Version 0.33  https:// 判別方法bug-fix
-    Version 0.34  https:// さらに判別方法bug-fix
-    Version 0.35  エラー表示判別fix
+
 */
 
 /*
@@ -43,6 +42,7 @@
     exec_smarty_filter: Smartyフィルタの強制実行
     stop_smarty_filter: Smartyフィルタの登録解除
     _php_version_check: PHPのバージョンチェック
+
 */
 
 // インクルードパスを追加
@@ -59,7 +59,7 @@ if (is_file(dirname(__FILE__).DIRECTORY_SEPARATOR.'flatframe'.DIRECTORY_SEPARATO
 
 class flatframe
 {
-    public $version = '0.35';
+    public $version = '0.30';
     public $notice = 'flatframe.php  copyright (c)econosys system  http://econosys-system.com/  Under The MIT License (MIT)';
     public $template;
     public $dsn;
@@ -96,8 +96,6 @@ class flatframe
 
     }
 
-
-
     //========== _php_version_check：PHPのバージョンチェック
     public function _php_version_check($PHP_MIN_VER)
     {
@@ -108,8 +106,6 @@ class flatframe
             return false;
         }
     }
-
-
 
     //========== _framework_setup_mbstring：日本語関連（mbstring）セット
     public function _framework_setup_mbstring()
@@ -125,8 +121,6 @@ class flatframe
         }
     }
 
-
-
     //========== _framework_setup_httpheader：HTTPヘッダ文字エンコードセット
     public function _framework_setup_httpheader()
     {
@@ -134,8 +128,6 @@ class flatframe
             ini_set('default_charset', $this->_ff_config['httpheader_encoding']);
         }
     }
-
-
 
     //========== _framework_setup_template：テンプレートのセットアップ
     public function _framework_setup_template()
@@ -187,8 +179,6 @@ class flatframe
         }
     }
 
-
-
     //========== stop_smarty_filter：Smartyフィルタの登録解除
     public function stop_smarty_filter($filter = '')
     {
@@ -202,8 +192,6 @@ class flatframe
             unset($this->template->autoload_filters['pre']);
         }
     }
-
-
 
     //========== exec_smarty_filter：Smartyフィルタの強制実行
     public function exec_smarty_filter($filter = '', $html)
@@ -223,7 +211,7 @@ class flatframe
     public function _framework_setup_form()
     {
         if (isset($_SERVER['SERVER_PORT'])) {
-            if ($_SERVER['SERVER_PORT'] == 443 || @$_SERVER['HTTPS'] === 'on') {
+            if ($_SERVER['SERVER_PORT'] == 443) {
                 $protocol = 'https://';
             } else {
                 $protocol = 'http://';
@@ -286,9 +274,6 @@ class flatframe
         $this->convert_form($this->_ff_config['script_encoding'], $this->_ff_config['output_encoding']);
     }
 
-
-
-		//==========
     public function _get_path_info()
     {
         if (!isset($_SERVER['PATH_INFO'])) {
@@ -313,11 +298,80 @@ class flatframe
         }
     }
 
+    // フォームパラメータ取得
+    public function _OLD__framework_setup_form_OLD()
+    {
+        if (isset($_SERVER['SERVER_PORT'])) {
+            if ($_SERVER['SERVER_PORT'] == 443) {
+                $protocol = 'https://';
+            } else {
+                $protocol = 'http://';
+            }
 
+            $this->q['_program_name'] = $_SERVER['PHP_SELF'];    //実行プログラム名を取得（ドキュメントルート表記）
+            $this->q['_program_uri'] = $protocol.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];    //実行プログラム名を取得（URI表記）
+        }
+        $this->q['_template_dir'] = $this->rootdir.'/templates';
 
-		//========== フォームパラメータのエンコードを変換
+        $cmd = '';
+
+        $env_request_method = getenv('REQUEST_METHOD');
+        // Windows版PHPの場合
+        if (strcmp($env_request_method, '') == 0) {
+            $env_request_method = $_SERVER['REQUEST_METHOD'];
+        }
+        if ($env_request_method == 'GET') {
+            foreach ($_GET as $key => $value) {
+                if (is_array($value)) {    // 配列の場合は中を辿って変換する
+                    $array = array();
+                    foreach ($value as $k => $v) {
+                        if (get_magic_quotes_gpc() == 1) {
+                            $v = stripslashes($v);
+                            array_push($array, $v);
+                        } else {
+                            array_push($array, $v);
+                        }
+                    }
+                    $value = $array;
+                } elseif (get_magic_quotes_gpc() == 1) {
+                    $value = stripslashes($value);
+                }
+                $this->q[$key] = $value;
+            }
+            if (isset($_GET['cmd'])) {
+                $this->cmd = $_GET['cmd'];
+            }
+        } elseif ($env_request_method == 'POST') {
+            foreach ($_POST as $key => $value) {
+                if (is_array($value)) {    // 配列の場合は中を辿って変換する
+                    $array = array();
+                    foreach ($value as $k => $v) {
+                        if (get_magic_quotes_gpc() == 1) {
+                            $v = stripslashes($v);
+                            array_push($array, $v);
+                        } else {
+                            array_push($array, $v);
+                        }
+                    }
+                    $value = $array;
+                } elseif (get_magic_quotes_gpc() == 1) {
+                    $value = stripslashes($value);
+                }
+                $this->q[$key] = $value;
+            }
+            if (isset($_POST['cmd'])) {
+                $this->cmd = $_POST['cmd'];
+            }
+        }
+        // エンコードを変更
+        $this->convert_form($this->_ff_config['script_encoding'], $this->_ff_config['output_encoding']);
+    }
+    /*
+     * フォームパラメータのエンコードを変換
+     */
     public function convert_form($encoding_to, $encoding_from)
     {
+        //$this->ndump($this->q);
         if (isset($this->_ff_config['script_encoding'])) {
             $encoding_to = $this->_ff_config['script_encoding'];
         }
@@ -333,13 +387,14 @@ class flatframe
         }
         foreach ($this->q as $key => $value) {
             if (is_array($value)) {    // 配列の場合は中を辿って変換する
+                //$array=array();
+                //foreach ($value as $k => $v){ $v=mb_convert_encoding($v, $encoding_to, $encoding_from); array_push($array, $v); }
+                //$value=$array;
             } else {
                 $this->q[$key] = mb_convert_encoding($value, $encoding_to, $encoding_from);
             }
         }
     }
-
-
 
     //========== _framework_validator_config：フォームバリデータセット
     public function _framework_validator_config()
@@ -349,8 +404,6 @@ class flatframe
         }
     }
 
-
-
     //========== dump：ダンプ
     public function dump($data)
     {
@@ -359,8 +412,6 @@ class flatframe
         print "</pre>\n\n";
     }
 
-
-
     //========== dump2：ダンプ（HTMLコメントアウト）
     public function dump2($data)
     {
@@ -368,8 +419,6 @@ class flatframe
         print_r($data);
         print "</pre> --> \n\n";
     }
-
-
 
     //========== dumpmem：メモリ使用状況をダンプ
     public function dumpmem()
@@ -381,8 +430,6 @@ class flatframe
         print "</pre>\n\n";
     }
 
-
-
     //========== dumpmem：メモリ使用状況をダンプ（HTMLコメントアウト）
     public function dumpmem2()
     {
@@ -392,8 +439,6 @@ class flatframe
         print("Memory:{$mem}");
         print " -->\n";
     }
-
-
 
     //========== make_hidden：hidden属性の自動生成
     public function make_hidden($hash = array())
@@ -424,8 +469,6 @@ class flatframe
         return $hidden;
     }
 
-
-
     //========== _make_filin_param
     // fillin用に フォーム名を  taggroup_id → taggroup_id[] に変える
     public function _make_filin_param($form_loop = array())
@@ -442,8 +485,6 @@ class flatframe
 
         return $output_looop;
     }
-
-
 
     //========== _framework_setup_db：データベース接続
     public function _framework_setup_db()
@@ -483,9 +524,8 @@ class flatframe
             }
         }
 
+// $this->dump( 'END:_framework_setup_db' );
     }
-
-
 
     //========== _framework_setup_timer：ベンチマーク/タイマーセット
     public function _framework_setup_timer()
@@ -500,15 +540,17 @@ class flatframe
         }
     }
 
-
-
     //========== _framework_setup_error：エラー出力設定
     public function _framework_setup_error()
     {
         ini_set('display_errors', '1');
+
         if (isset($this->_ff_config['errorReporting'])) {
             $pv = floatval(phpversion());
-						if ($pv >= 5.3) {
+            // print $pv;
+            if ($pv >= 7.0) {
+                error_reporting(E_ALL);
+            } elseif ($pv >= 5.3) {
                 // print "PHP Version : {$pv}";
                 if ($this->_ff_config['errorReporting']     == 1) {
                     error_reporting(E_ALL & ~E_DEPRECATED);
@@ -530,8 +572,6 @@ class flatframe
         }
     }
 
-
-
     //========== do_timer_display：タイマー表示
     public function do_timer_display()
     {
@@ -542,8 +582,6 @@ class flatframe
             print '</div><br />'."\n";
         }
     }
-
-
 
     //========== sanitize_html：配列（mix）の中の文字コードを再帰的にhtmlサニタイズする
     public function sanitize_html($mix)
@@ -574,8 +612,6 @@ class flatframe
         }
     }
 
-
-
     //========== sanitize_mysql：配列（mix）の中の文字コードを再帰的にMySQLサニタイズする
     public function sanitize_mysql($mix)
     {
@@ -595,8 +631,6 @@ class flatframe
         }
     }
 
-
-
     //========== convert_assign：文字コード変換 + アサイン
     public function convert_assign($conv_to, $conv_from, $mix)
     {
@@ -605,8 +639,6 @@ class flatframe
         }
         $this->template->assign($mix);
     }
-
-
 
     //========== convert_encoding_r：配列（mix）の中の文字コードを再帰的に変換する
     public function convert_encoding_r($mix = '')
@@ -631,8 +663,6 @@ class flatframe
         }
     }
 
-
-
     //========== assign：文字コード自動変換変換 + アサイン
     public function assign($mix)
     {
@@ -645,8 +675,6 @@ class flatframe
         $this->template->assign($mix);
     }
 
-
-
     //========== prerun：
     public function do_app_prerun()
     {
@@ -655,8 +683,6 @@ class flatframe
         }
     }
 
-
-
     //========== postrun：
     public function do_app_postrun()
     {
@@ -664,8 +690,6 @@ class flatframe
             $this->app_postrun();
         }
     }
-
-
 
     //========== do_method：メソッドの実行
     public function do_method()
@@ -690,8 +714,6 @@ class flatframe
         }
     }
 
-
-
     //========== _framework_err：エラーメッセージ出力
     public function _framework_err($str)
     {
@@ -699,6 +721,14 @@ class flatframe
             mb_convert_variables($this->_ff_config['debugEncoding'], 'auto', $str);
         }
         $str = $this->sanitize_html($str);
+        /*
+        $str = preg_replace('/;/','!___escape_semicolon___!',$str); // セミコロン
+        $str = htmlspecialchars($str, ENT_QUOTES);
+        $str = preg_replace('/!___escape_semicolon___!/','&#59;',$str); // セミコロン
+        $str = preg_replace('{/}','&#47;',$str); // スラッシュ
+        $str = preg_replace('{\\\}','&#92;',$str); // バックスラッシュ
+        $str = preg_replace('{=}','&#61;',$str); // イコール
+        */
 
         $print_err_flag = 1;
         if (isset($this->_ff_config['FrameworkErrorReporting'])) {
@@ -717,8 +747,6 @@ class flatframe
         die();
     }
 
-
-
     //========== print_head：httpヘッダ出力
     public function print_head()
     {
@@ -728,8 +756,6 @@ class flatframe
             header('Content-Type: text/html;');
         }
     }
-
-
 
     //========== print_head_nocache：httpヘッダ出力 (no-cache)
     public function print_head_nocache()
@@ -743,8 +769,6 @@ class flatframe
         header('Cache-Control: post-check=0, pre-check=0', false);
         header('Pragma: no-cache');
     }
-
-
 
     //========== _create_loop
     // 引数										戻り値
@@ -775,20 +799,17 @@ class flatframe
         return $new_loop;
     }
 
-
-
     //========== run：プログラムの起動
     public function run()
     {
-        $this->setup();
-        $this->_framework_setup_config();
-
         $this->_framework_setup_error();
+        $this->setup();
 
+        $this->_framework_setup_config();
         $this->_framework_setup_mbstring();
         $this->_framework_setup_httpheader();
         $this->_framework_setup_form();
-
+//$this->_framework_validator_config();
         $this->_framework_setup_template();
 
 				if ( ! isset($this->_ff_config['dbAutoConnect']) ){ $this->_framework_setup_db(); }

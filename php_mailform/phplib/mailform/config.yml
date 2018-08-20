@@ -10,7 +10,7 @@
 
 # 担当者設定
 site_name        : 【テスト会社名】                       # メール送信者（ユーザーへのメールの送信者）
-site_to          : xxxxx@yyyyy.zzz                      # お問い合わせフォーム受信担当者メールアドレス
+site_to          : aaa@bbb.ccc.ddd                      # お問い合わせフォーム受信担当者メールアドレス
 site_cc          :                                      # 担当者CC
 site_bcc         :                                      # 担当者BCC
 site_subject     : ホームページよりお問い合わせがありました  # 担当者向けメールのタイトル

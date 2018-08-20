@@ -1,7 +1,7 @@
 <?php
 
 // =======================================================================================
-// ff_mailform.php 　The MIT License  (c)2017 econosys system  http://econosys-system.com/
+// ff_mailform.php 　The MIT License  (c)2018 econosys system  https://econosys-system.com/
 // =======================================================================================
 //
 // Version 1.00  ：公開Ver
@@ -11,9 +11,8 @@
 // Version 1.05  ：subject文字化けのbug-fix
 // Version 1.07  ：細かいbug-fix
 // Version 1.08  ：do_confirm() の細かいbug-fix
-// Version 1.09  ：notice表示の削除
-// Version 1.10  ：一部のメールヘッダ修正
-// Version 1.11  ：css崩れ,複数添付ファイル送信時のバグを修正
+// Version 1.12  ：[fix] 細かいbug-fix , 4対応のbootwatch
+// Version 1.13  ：[fix] すべての項目を選択時ファイル選択すると挙動がおかしいバグを修正
 
 
 require_once dirname(__FILE__).'/../flatframe.php';
@@ -30,9 +29,9 @@ class ff_mailform extends flatframe
         $this->rootdir = dirname(__FILE__);
         $this->run_modes = array(
             'default' => 'do_input' ,
-            'input' => 'do_input' ,
+            'input'   => 'do_input' ,
             'confirm' => 'do_confirm' ,
-            'submit' => 'do_submit' ,
+            'submit'  => 'do_submit' ,
         );
     }
 
@@ -268,8 +267,6 @@ class ff_mailform extends flatframe
             if (strcmp($key, 'subject') == 0) {
                 $headers['Subject'] = mb_encode_mimeheader($mix['subject'],'ISO-2022-JP');
             } elseif (strcmp($key, 'to') == 0) {
-            } elseif (strcmp($key, 'replyto') == 0) {
-                $headers['Reply-To'] = $value;
             } elseif (strcmp($key, 'mailtext') == 0) {
             } elseif (strcmp($key, 'attach_file') == 0) {
             } else {
@@ -304,7 +301,7 @@ class ff_mailform extends flatframe
         $mailtext = mb_convert_encoding($mailtext, 'ISO-2022-JP', 'UTF-8');
 
         // 添付ファイルがある場合はmime
-        if (is_array( @$mix['attach_file'] )) {
+        if (is_array(@$mix['attach_file'])) {
             require_once 'Mail/mime.php';
             $mime = new Mail_Mime("\n");  //改行コードをセット
             $mime->setTxtBody($mailtext);
