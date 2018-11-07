@@ -9,7 +9,13 @@
 <dt>{ $v.title_mail}</dt>
 <dd>
 { if is_array($q[$k]) }
-	{ assign var="f" value=$q[$k] }{ $f.name }
+	{ if  $q[$k].uploaded_basename }
+		{ assign var="f" value=$q[$k] }{ $f.name }
+	{ else }
+		{ foreach from=$q[$k] item="vvv" }
+			<div class="checkbox_item">{ $vvv }</div>
+		{ /foreach }
+	{ /if }
 { else }
 	{ $q[$k]|escape|nl2br }
 { /if }

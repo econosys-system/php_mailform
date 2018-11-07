@@ -13,6 +13,7 @@
 // Version 1.08  ：do_confirm() の細かいbug-fix
 // Version 1.12  ：[fix] 細かいbug-fix , 4対応のbootwatch
 // Version 1.13  ：[fix] すべての項目を選択時ファイル選択すると挙動がおかしいバグを修正
+// Version 1.14  ：[fix] checkboxの不具合修正
 
 
 require_once dirname(__FILE__).'/../flatframe.php';
@@ -247,8 +248,16 @@ class ff_mailform extends flatframe
         $mail_common = '';
         foreach ($this->_ff_config['form'] as $k => $v) {
             if (is_array( @$this->q[$k] )) {
-                $fv = $this->q[$k];
-                $mail_common .= "{$v['title_mail']} : {$fv[0]} ({$fv[2]} バイト)\n";
+                if ( @$v['input_type'] == 'file' ){
+                    $fv = $this->q[$k];
+                    $mail_common .= "{$v['title_mail']} : {$fv[0]} ({$fv[2]} バイト)\n";
+                }
+                elseif ( @$v['input_type'] == 'checkbox' ){
+                    $fv = @$this->q[$k];
+                    $values = join(" , ",$fv);
+                    $tm = @$v['title_mail'];
+                    $mail_common .= "{$tm} :  {$values} \n";
+                }
             } else {
                 $fv = @$this->q[$k];
                 $tm = @$v['title_mail'];

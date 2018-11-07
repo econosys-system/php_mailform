@@ -23,7 +23,7 @@
 <div class="{ $row2_class_name|escape }">
 { if $v.input_type == "checkbox" || $v.input_type == "radio"}
 	{ foreach from=$v.input_values key="iv_k" item="iv_v" name="iv_loopname"}
-	<label><input type="{ $v.input_type|escape }" name="{ $k|escape }" {if $v.class }class="{ $v.class|escape }"{ /if } value="{ $iv_v.value|escape }">{ $iv_v.value|escape }</label><br>
+	<label><input type="{ $v.input_type|escape }" name="{ $k|escape }[]" {if $v.class }class="{ $v.class|escape }"{ /if } value="{ $iv_v.value|escape }">{ $iv_v.value|escape }</label><br>
 	{ /foreach }
 { elseif $v.input_type == "select"}
 <select name="{ $k|escape }">
