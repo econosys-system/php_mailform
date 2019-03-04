@@ -11,7 +11,7 @@
 { /foreach }
 </div>
 
-<form id="{ $form_id_name|escape }" class="{ $form_class_name|escape }" action="{$_program_name}" method="post" { if $form_attach == 1 }enctype="multipart/form-data"{ /if} >
+<form id="{ $form_id_name|escape }" class="{ $form_class_name|escape }" action="{$_program_name}" onsubmit="changeFlg=false;" method="post" { if $form_attach == 1 }enctype="multipart/form-data"{ /if} >
 <span class="p-country-name" style="display:none;">Japan</span> <!-- for yubinbango.js  -->
 {$hidden}
 
