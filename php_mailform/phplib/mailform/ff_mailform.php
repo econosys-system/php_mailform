@@ -14,6 +14,7 @@
 // Version 1.12  ：[fix] 細かいbug-fix , 4対応のbootwatch
 // Version 1.13  ：[fix] すべての項目を選択時ファイル選択すると挙動がおかしいバグを修正
 // Version 1.14  ：[fix] checkboxの不具合修正
+// Version 1.15  ：[add] 入力エリアに文字が残っている時に画面遷移しようとした時にアラート表示
 
 
 require_once dirname(__FILE__).'/../flatframe.php';
@@ -54,6 +55,8 @@ class ff_mailform extends flatframe
 
         $mail_form_table = $this->_make_mail_form_table();
         $this->template->assign(array('mail_form_table' => $mail_form_table));
+
+        $this->template->assign(array('config__beforeunload_js' => $this->_ff_config['beforeunload_js']));
 
         require_once 'FillInForm.class.php';
         $output = $this->template->fetch($this->_ff_config['template_file_input']);
@@ -126,6 +129,7 @@ class ff_mailform extends flatframe
         $hidden = '<input type="hidden" name="cmd" value="submit">'."\n";
         $hidden .= $this->_make_hidden_parameter();
         $this->template->assign(array('hidden' => $hidden));
+        $this->template->assign(array('config__beforeunload_js' => $this->_ff_config['beforeunload_js']));
         $mail_form_table_confirm = $this->_make_mail_form_table_confirm();
         $this->template->assign(array('mail_form_table_confirm' => $mail_form_table_confirm));
         $this->template->display($this->_ff_config['template_file_confirm']);

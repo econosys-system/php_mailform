@@ -1,6 +1,6 @@
 
 # ===================================================================================
-# config.yml 　The MIT License 　(c)2017 econosys system  http://econosys-system.com/
+# config.yml 　The MIT License　(c)2019 econosys system  https://econosys-system.com/
 # ===================================================================================
 
 
@@ -67,8 +67,13 @@ row2_class_name       : col-xs-12 col-sm-8    # <div class="LDLDLD">のクラス
 template_file_input   : mail_form.html          # テンプレートファイル名（入力画面）
 template_file_confirm : mail_form_confirm.html  # テンプレートファイル名（確認画面）
 
-yubinbango_js         : true                  # trueの時【郵便番号→住所自動変換ライブラリ】Yubinbango.js を読み込みます。
-tmp_dir               : tmp
+tmp_dir               : tmp                   # アップロードファイルを一時処理するディレクトリ
+
+# ====================================================================
+# JavaScriptの設定
+# ====================================================================
+yubinbango_js   : true                  # trueの時【郵便番号→住所自動変換ライブラリ】Yubinbango.js を読み込みます。
+beforeunload_js : true                  # trueの時「入力エリアに文字が残っている時に画面遷移しようとした時にアラートを表示」します
 
 
 # ====================================================================
