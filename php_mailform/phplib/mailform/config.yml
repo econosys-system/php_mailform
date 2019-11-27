@@ -10,7 +10,7 @@
 
 # 担当者設定
 site_name        : 【テスト会社名】                       # メール送信者（ユーザーへのメールの送信者）
-site_to          : aaa@bbb.ccc.ddd                      # お問い合わせフォーム受信担当者メールアドレス
+site_to          : name@YOUR-SERVER.COM                 # お問い合わせフォーム受信担当者メールアドレス
 site_cc          :                                      # 担当者CC
 site_bcc         :                                      # 担当者BCC
 site_subject     : ホームページよりお問い合わせがありました  # 担当者向けメールのタイトル
@@ -21,14 +21,14 @@ site_replyto     :                                      # 返信先を別アド�
 user_subject : お問い合わせありがとうございます | 【テスト会社名】   # お客様向けメールのタイトル
 
 
-# メール送信方式 (mail または smtp)
-mail_method : mail
+# メール送信方式 (smtp必須となりました)
+mail_method : smtp
 
 # SMTP（メール送信サーバ）設定（メール送信方式が smtp の時に必要）
-SMTP_host  : yyyyy.zzz
+SMTP_host  : YOUR-SERVER.COM
 SMTP_port  : 587
-SMTP_user  : xxxxx@yyyyy.zzz
-SMTP_pass  : MY_PASSWORD
+SMTP_user  : name@YOUR-SERVER.COM
+SMTP_pass  : PASSWORD
 
 # メール送信完了画面（メール送信後この画面にリダイレクトします。）
 end_html   : php_mailform_end.html

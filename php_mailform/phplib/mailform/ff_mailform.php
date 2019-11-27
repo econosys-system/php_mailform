@@ -1,7 +1,7 @@
 <?php
 
 // =======================================================================================
-// ff_mailform.php 　The MIT License  (c)2018 econosys system  https://econosys-system.com/
+// ff_mailform.php 　The MIT License  (c)2019 econosys system  https://econosys-system.com/
 // =======================================================================================
 //
 // Version 1.00  ：公開Ver
@@ -15,16 +15,21 @@
 // Version 1.13  ：[fix] すべての項目を選択時ファイル選択すると挙動がおかしいバグを修正
 // Version 1.14  ：[fix] checkboxの不具合修正
 // Version 1.15  ：[add] 入力エリアに文字が残っている時に画面遷移しようとした時にアラート表示
+// Version 1.16  ：[fix] PHP7.3対応 メールヘッダ追加して Windows10文字化け対応
+// Version 1.17  ：[fix] 添付ファイルメール送信時の不具合対処
 
 
 require_once dirname(__FILE__).'/../flatframe.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 class ff_mailform extends flatframe
 {
+
     public function __construct($configfile)
     {
         $this->_ff_configfile = $configfile;
     }
+
 
     public function setup()
     {
@@ -37,19 +42,23 @@ class ff_mailform extends flatframe
         );
     }
 
+
     // ========== app_prerun：前処理
     public function app_prerun()
     {
     }
 
-    // ========== app_prerun：後処理
+
+    // ========== app_postrun：後処理
     public function app_postrun()
     {
     }
 
+
     // ========== do_input
     public function do_input()
     {
+
         $hidden = '<input type="hidden" name="cmd" value="confirm">';
         $this->template->assign(array('hidden' => $hidden));
 
@@ -272,6 +281,68 @@ class ff_mailform extends flatframe
         return $mail_common;
     }
 
+    // ========== _swiftmail メール送信
+    public function _swiftmail($mix = array())
+    {
+
+            // 'to'          => $to,
+            // 'from'        => $from,
+            // 'from_name'   => $this->_ff_config['from_name'] ,
+            // 'subject'     => $subject,
+            // 'cc'          => $this->_ff_config['site_cc'],
+            // 'bcc'         => $this->_ff_config['site_bcc'],
+            // 'replyto'     => $this->_ff_config['site_replyto'],
+            // 'mailtext'    => $mailtext,
+            // 'attach_file' => $attach_file,
+
+        if (strcmp($this->_ff_config['mail_method'], 'smtp') != 0) {
+            die('エラー : 設定ファイルの「メール送信方式」が smtp 以外になっています。smtpにしてサーバ情報を設定してください。');
+        }
+
+        $transport = (new Swift_SmtpTransport($this->_ff_config['SMTP_host'], $this->_ff_config['SMTP_port']))
+            ->setUsername($this->_ff_config['SMTP_user'])
+            ->setPassword($this->_ff_config['SMTP_pass'])
+            ;
+ 
+        $mailer = new Swift_Mailer($transport);
+
+        // 添付ファイル（全ての添付を処理する）
+        if ( isset($mix['attach_file']) ){
+            foreach ($mix['attach_file'] as $k => $v) {
+                $file_full_path    = $v[4];
+                $file_name         = $v[0];
+                $file_content_type = $v[1];
+
+                $attachment = \Swift_Attachment::fromPath( $file_full_path )
+                ->setFilename( $file_name )
+                ->setContentType( $file_content_type );
+            }
+        }
+
+        $message = (new \Swift_Message('My important subject here'))
+            ->setFrom([$mix['from'] => $mix['from_name']])
+            ->setTo( $mix['to'] )
+            ->setSubject( $mix['subject'] )
+            ->setBody( $mix['mailtext']);    // , 'text/html'
+
+        // replytoがある場合はセット（管理者へ送信する場合）
+        if ( isset($mix['replyto']) ){
+            $message->setReplyTo( $mix['replyto'] );
+        }
+
+        // 添付ファイルがある場合はセット
+        if ( isset($mix['attach_file']) ){
+            $message->attach($attachment);
+        }
+
+        $result = $mailer->send($message);
+
+        return $result;
+
+    }
+
+
+
     // ========== _pmail メール送信
     public function _pmail($mix = array())
     {
@@ -311,16 +382,22 @@ class ff_mailform extends flatframe
         // メール本文エンコード
         $mailtext = $mix['mailtext'];
         $mailtext = str_replace("\r", "\n", str_replace("\r\n", "\n", $mailtext));
+$this->dump($mailtext); die;
         $mailtext = mb_convert_encoding($mailtext, 'ISO-2022-JP', 'UTF-8');
 
         // 添付ファイルがある場合はmime
         if (is_array(@$mix['attach_file'])) {
+
+$this->dump($this->q); die;
             require_once 'Mail/mime.php';
+
             $mime = new Mail_Mime("\n");  //改行コードをセット
+            $mime->setParam('text_charset', 'ISO-2022-JP');
+            $mime->setParam('text_encoding', '7bit');
             $mime->setTxtBody($mailtext);
             foreach ($mix['attach_file'] as $atk => $atv) {
                 $ja_filename = $atv[0];
-                mb_convert_variables('ISO-2022-JP', 'AUTO', $ja_filename);
+                mb_convert_variables('ISO-2022-JP', 'UTF-8', $ja_filename);
 
                 $mime->addAttachment($atv[4],                // attach_file (file_path)
                     $atv[1],                // content-type
@@ -345,7 +422,14 @@ class ff_mailform extends flatframe
             $headers = $mime->headers($headers);
         }
 
+        // ヘッダ追加
+        $headers["MIME-Version"] = "1.0";
+        $headers["Content-Type"] = "text/plain; charset=ISO-2022-JP";
+        $headers["Content-Transfer-Encoding"] = "7bit";
+
+        // 送信
         $result = $objMail->send($mix['to'], $headers, $mailtext);
+
         if (PEAR::isError($result)) {
             die($result->getMessage());
 
@@ -358,7 +442,6 @@ class ff_mailform extends flatframe
     // ========== _mail_to_site （サイト管理者へメール送信）
     public function _mail_to_site($mail_common = '')
     {
-
         //お店メールの設定
         $subject = $this->_ff_config['site_subject'];
         $from = $this->q['email'];
@@ -395,40 +478,45 @@ class ff_mailform extends flatframe
             }
         }
 
-        $rt = $this->_pmail(array(
-            'to' => $to,
-            'from' => $from,
-            'subject' => $subject,
-            'cc' => $this->_ff_config['site_cc'],
-            'bcc' => $this->_ff_config['site_bcc'],
-            'replyto' => $this->_ff_config['site_replyto'],
-            'mailtext' => $mailtext,
+        $rt = $this->_swiftmail(array(
+            'to'          => $to,
+            'from'        => $from,
+            // 'from'        => $to,
+            'from_name'   => $this->_ff_config['site_name'] ,
+            'subject'     => $subject,
+            'cc'          => $this->_ff_config['site_cc'],
+            'bcc'         => $this->_ff_config['site_bcc'],
+
+            // 'replyto'     => $this->_ff_config['site_replyto'],
+            'replyto'     => $from,
+
+            'mailtext'    => $mailtext,
             'attach_file' => $attach_file,
         ));
 
         return $rt;
     }
 
+
+
     // ========== _mail_to_customer
     public function _mail_to_customer($mail_common = '')
     {
-
         //お客様へメールの設定
         $to = $this->q['email'];
         $subject = $this->_ff_config['user_subject'];
-        $from = mb_encode_mimeheader($this->_ff_config['site_name'])."<{$this->_ff_config['site_to']}>";
-        $errors_to = $this->_ff_config['site_to'];
 
         $this->template->assign($this->q);
         $this->template->assign(array('mail_common' => $mail_common));
         $mailtext = $this->template->fetch('mail_text_user.txt');
 
         //お客様へメールの送信
-        $value = $this->_pmail(array(
-            'to' => $to,
-            'from' => $from,
-            'subject' => $subject,
-            'mailtext' => $mailtext,
+        $value = $this->_swiftmail(array(
+            'to'        => $to,
+            'from'      => $this->_ff_config['site_to'],
+            'from_name' => $this->_ff_config['site_name'] ,
+            'subject'   => $subject,
+            'mailtext'  => $mailtext,
         ));
 
         return $value;

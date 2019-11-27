@@ -1,0 +1,43 @@
+
+<!-- ff_mailform.php 　The MIT License  (c)2017 econosys system  http://econosys-system.com/ -->
+<!-- [table_confirm.html] -->
+<form id="form_contact" method="post">
+{$hidden}
+<div class="{ $div_class_name|escape }">
+<dl class="{ $ul_class_name|escape }">
+{ foreach from=$form_loop key="k" item="v" name="loopname"}
+<dt>{ $v.title_mail}</dt>
+<dd>
+{ if is_array($q[$k]) }
+	{ if  $q[$k].uploaded_basename }
+		{ assign var="f" value=$q[$k] }{ $f.name }
+	{ else }
+		{ foreach from=$q[$k] item="vvv" }
+			<div class="checkbox_item">{ $vvv }</div>
+		{ /foreach }
+	{ /if }
+{ else }
+	{ $q[$k]|escape|nl2br }
+{ /if }
+</dd>
+{ /foreach }
+</dl><!-- [.{ $ul_class_name|escape }] -->
+
+<p class="text-center mt10"><button id="submit_button" class="btn btn-success notrepeat" data-loading-text="メッセージを送信する　<i class='fa fa-refresh fa-spin'></i>" >メッセージを送信する</button></p>
+<p class="text-center mt15"><input type="button" value="戻る" class="btn" onclick="history.back();"></p>
+
+</div><!-- [.{ $div_class_name|escape }] -->
+</form>
+
+{literal}
+<script>
+  $('#submit_button').on('click', function () {
+    $(this).button('loading');
+{/literal}
+  	document.{ $form_id_name|escape }.submit();
+{literal}
+  });
+</script>
+{/literal}
+
+<!-- [table_confirm.html] -->

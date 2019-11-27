@@ -1,0 +1,198 @@
+@charset "UTF-8";
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance:textfield;
+}
+
+.contents__header__contact {
+	margin: 37px 0 0;
+	float: left
+}
+
+.heading_c {
+	font-weight: 400;
+	font-size: 14px
+}
+
+.contents__header__tel {
+	display: block;
+	float: left;
+	margin: 25px 0 0 40px;
+	color: #8e8068;
+	font-family: 'Bebas Neue',sans-serif;
+	font-size: 24px
+}
+
+.contents__header__memo {
+	display: block;
+	float: left;
+	margin: 33px 0 0 15px;
+	color: #827159;
+	font-family: 'Hiragino Kaku Gothic ProN',"Hiragino Mincho ProN";
+	font-family: "游ゴシック体","Yu Gothic",YuGothic,sans-serif;
+	font-size: 13px;
+	line-height: 28px;
+	letter-spacing: 1.4px
+}
+
+@media (max-width:767px) {
+
+.contents__header__contact {
+	margin: 29px 0 0;
+	float: left
+}
+
+.contents__header__tel {
+	float: right;
+	margin: 25px 10px 0 0;
+	padding: 0;
+	line-height: 1
+}
+
+.contents__header__memo {
+	clear: both;
+	float: none;
+	display: block;
+	margin: 0 0 10px;
+	color: #C2BAAD;
+	font-size: 12px;
+	letter-spacing: .5px;
+	line-height: 1.4
+}
+
+}
+
+.contents__header__memo__phase ul {
+	margin: 0
+}
+
+.contents__header__memo__phase li {
+	display: block;
+	float: left;
+	margin: 0 0 0 5px;
+	padding: 0;
+	list-style: none;
+	opacity: .3
+}
+
+.contents__header__memo__phase li.active {
+	opacity: 1
+}
+
+.contents__header__memo__phase li:after {
+	opacity: .3;
+	content: " /"
+}
+
+.contents__header__memo__phase li:last-child:after {
+	content: ""
+}
+
+.contents__form_back {
+	background-color: #F5F3F1;
+	padding: 20px 0 20px 5px
+}
+
+.contents__form_list {
+	margin: 0;
+	padding: 0
+}
+
+.contents__form_list li {
+	margin: 0;
+	list-style: none;
+	vertical-align: top;
+	padding: 5px 0 5px 15px
+}
+@media (max-width: 767px) {
+	.contents__form_list li {
+		padding: 5px 0 0px 15px
+	}
+}
+
+
+.contents__form_list span {
+	font-family: "游ゴシック","Hiragino Kaku Gothic ProN",YuGothic,Meiryo,sans-serif;
+	font-size: 13px;
+	display: inline-block;
+	padding: 4px 0
+}
+
+
+.contents__form_list input[type=text], .contents__form_list input[type=number], .contents__form_list input[type=email] , .contents__form_list input[type=tel] {
+	background: #FCFBF9;
+	border: 1px solid #F1ECE1;
+	width: 100%;
+	max-width: 83%;
+	height: 30px;
+	padding: 0 10px
+}
+
+.contents__form_list input[type=file] {
+	display: none
+}
+
+.contents__form_list input[type=radio],.contents__form_list input[type=checkbox] {
+	margin: 3px
+}
+
+.contents__form_list #mail_form_attach_filename {
+	width: 180px;
+	font-size: smaller
+}
+
+.contents__form_list textarea {
+	background: #FCFBF9;
+	border: 1px solid #F1ECE1;
+	width: 100%;
+	max-width: 83%;
+	height: 140px;
+	padding: 5px 10px
+}
+
+.contents__form_list ::-webkit-input-placeholder {
+	color: #ddd
+}
+
+.contents__form_list label {
+	font-weight: 400;
+	font-size: 12px;
+	line-height: 1.1
+}
+
+input[type="text"]:focus ,input[type="number"]:focus , input[type="email"]:focus , input[type="tel"]:focus , input[type="password"]:focus , textarea:focus {
+  border: 1px solid #aaa;
+  background: white;
+  outline: 0;
+  transition-duration: 300ms;
+}
+
+
+
+dl,dt,dd {
+  box-sizing: border-box;
+}
+dt {
+	padding: 7px 0px 7px 15px;
+}
+dd {
+	padding: 7px 15px 7px 15px;
+}
+dt {
+  width: 30%;
+  float: left;
+}
+dd {
+  margin-left: 30%;
+}
+dd:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
