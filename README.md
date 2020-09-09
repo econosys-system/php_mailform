@@ -6,6 +6,7 @@ MITライセンスのもと、どなたでも自由に仕様、改変、再配�
 
 
 
+<br>
 
 # ● php mailformの設置方法
 
@@ -17,6 +18,7 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
 
 
 
+<br>
 
 # ● php mailformの設定方法
 
@@ -31,6 +33,7 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
 
 
 
+<br>
 
 # ● フォーム項目の設定方法（ config.yml フォームの設定）
 
@@ -74,8 +77,9 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
 | validate   |フォームの入力値チェックを選択|
 
 
+<br>
 
-###● フォーム項目を必須項目にするには下記を追加して下さい。
+## ＊ フォーム項目を必須項目にするには下記を追加して下さい。
 
 ・1行テキストや複数行テキストを入力必須にする
 
@@ -97,8 +101,9 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
 エラーメッセージは適宜書き換えてください。
 
 
+<br>
 
-###● フォーム項目の必須項目をやめて任意入力項目にするには次の行を削除して下さい
+## ＊ フォーム項目の必須項目をやめて任意入力項目にするには次の行を削除して下さい
 
 ```
       NOT_BLANK  : お名前を入力してください。
@@ -110,6 +115,7 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
 
 
 
+<br>
 
 # ● php mailformの動作の概要
 
@@ -136,11 +142,14 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
 
 
 
+<br>
 
 #  ● お問合せ
 本ソフトウェアについての質問・バグ報告・要望などございましたら
 <a class="md" href="https://econosys-system.com/contact.php">こちらのお問い合わせフォーム</a>
 からなんなりとお問い合わせ下さい。
+
+<br>
 
 #  ● 公式サイト
 [無料のメールフォームPHP php_mailform](https://econosys-system.com/freesoft/php_mailform.html)
