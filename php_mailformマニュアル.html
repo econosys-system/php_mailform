@@ -24,7 +24,7 @@
 
 <div class="row">
 	<div class="col-sm-9">
-		<h1 class="h2 logo"><i class="fa fa-envelope" aria-hidden="true"></i> php mailform  <span class="version_mini">Version 1.20</span></h1>
+		<h1 class="h2 logo"><i class="fa fa-envelope" aria-hidden="true"></i> php mailform  <span class="version_mini">Version 1.36</span></h1>
 	</div>
 	<div class="col-sm-3">
 		<div class="mt20"><a class="navi_link" href="http://econosys-system.com/freesoft/php_mailform.html" target="_blank"><i class="fa fa-download" aria-hidden="true"></i> Download</a></div>
@@ -59,6 +59,7 @@ MITライセンスのもと、どなたでも自由に仕様、改変、再配�
 mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」フォルダが生成されます。<br>
 **1.**「php_mailform」フォルダごとお使いのWEBサーバにFTPアップロードします。<br>
 **2.** ファイル「php_mailform/phplib/mailform/config.yml」のパーミッションを <b>600</b> にします。<br>
+**2(sakura).** さくらレンタルサーバの場合はファイル「php_mailform/php_mailform.php」のパーミッションを <b>604</b> にします。<br>
 **3.** ブラウザに　http://設置したサーバー名/php_mailform/php_mailform.php と入力してアクセスします。<br>
 <br>
 
@@ -110,6 +111,18 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
 ```
     validate   :
       NOT_BLANK  : お名前を入力してください。
+```
+
+###● メールアドレス(email)とメールアドレス（確認）(email_confirm)の一致をチェックするには下記を追加して下さい。
+```
+  email_confirm :
+    title_mail : メールアドレス（確認）
+    title_html : メールアドレス（確認） ※
+    placeholder:
+    input_type : email # text, number, email, tel, password, select, checkbox, textarea, radio, file から選択。未指定時は「text」
+    validate   :
+      NOT_BLANK   : メールアドレス（確認）を入力してください。
+      DUPLICATION,email       : メールアドレスとメールアドレス（確認）が一致しません
 ```
 
 
@@ -173,7 +186,7 @@ document.write(md);
 	<footer>
 	<div class="row">
 	<div class="col-sm-12">
-	<div class="mb50 pull-right"><a class="lc01" href="https://econosys-system.com/freesoft/php_mailform.html" target="_blank">php mailform (c) 2019 econosys system</a></div>
+	<div class="mb50 pull-right"><a class="lc01" href="https://econosys-system.com/freesoft/php_mailform.html" target="_blank">php mailform (c) <script>document.write(new Date().getFullYear());</script> econosys system</a></div>
 	</div>
 	</div>
 	</footer>

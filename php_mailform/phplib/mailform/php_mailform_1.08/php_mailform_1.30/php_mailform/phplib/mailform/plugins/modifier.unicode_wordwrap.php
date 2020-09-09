@@ -1,2 +1,0 @@
-<?php
- function smarty_modifier_unicode_wordwrap($str, $len=80, $break="\n", $indent='' ){ $str = str_replace( "\r", $break, str_replace( "\r", "\n", str_replace("\r\n", "\n", $str) ) ); $str = preg_replace('/(.{'.$len.'})/u', '${1}'.$break, $str); if (strcmp($indent,'')==0){ return $str; } else{ $ar = preg_split("/{$break}/",$str); for($i=0 ; $i<count($ar); $i++){ $ar[$i] = $indent.$ar[$i]; } return join($break, $ar); } } ?>

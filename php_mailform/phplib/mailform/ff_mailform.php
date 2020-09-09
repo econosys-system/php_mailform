@@ -1,7 +1,7 @@
 <?php
 
 // =======================================================================================
-// ff_mailform.php 　The MIT License  (c)2019 econosys system  https://econosys-system.com/
+// ff_mailform.php 　The MIT License  (c)2020 econosys system  https://econosys-system.com/
 // =======================================================================================
 //
 // Version 1.00  ：公開Ver
@@ -17,6 +17,14 @@
 // Version 1.15  ：[add] 入力エリアに文字が残っている時に画面遷移しようとした時にアラート表示
 // Version 1.16  ：[fix] PHP7.3対応 メールヘッダ追加して Windows10文字化け対応
 // Version 1.17  ：[fix] 添付ファイルメール送信時の不具合対処
+// Version 1.171 ：[fix] 添付ファイルなしの時の不具合対処
+// Version 1.22  ：[fix] ssl フラグを追加
+// Version 1.23  ：[fix] 複数attach file
+// Version 1.30  ：[add] sendmailオプション追加
+// Version 1.31  ：[add] 管理者メールに番号を追加
+// Version 1.32  ：[add] {dayno}を追加
+// Version 1.33  ：[add] smtp時エラーとなる現象を修正 , エラーメッセージ修正
+// Version 1.34  ：[fix] TMPフォルダない時自動作成
 
 
 require_once dirname(__FILE__).'/../flatframe.php';
@@ -83,7 +91,6 @@ class ff_mailform extends flatframe
     // ========== do_confirm
     public function do_confirm()
     {
-
         // attach_file
         $attach_array = array();
         foreach ($this->_ff_config['form']  as $k => $v) {
@@ -93,6 +100,9 @@ class ff_mailform extends flatframe
         }
         if (count($attach_array) > 0) {
             require_once 'exfileupload2.php';
+            if ( ! is_dir(dirname(__FILE__).DIRECTORY_SEPARATOR.$this->_ff_config['tmp_dir']) ){
+                mkdir(dirname(__FILE__).DIRECTORY_SEPARATOR.$this->_ff_config['tmp_dir']);
+            }
             $file = new exfileupload2(dirname(__FILE__).DIRECTORY_SEPARATOR.$this->_ff_config['tmp_dir']);
             $file->delete_tmp();
             $filelist = $file->move();
@@ -103,14 +113,14 @@ class ff_mailform extends flatframe
         }
 
         // varidation
-        require_once 'exvalidator.php';
+        require_once 'Exvalidator.php';
         $validate_array = array();
         foreach ($this->_ff_config['form'] as $k => $v) {
             if ( @$v['validate'] ) {
                 $validate_array['form'][$k] = $v['validate'];
             }
         }
-        $validator = new validator($validate_array, $this->q);
+        $validator = new Exvalidator($validate_array, $this->q);
 
         // 入力値チェック
         $result = $validator->check('form');
@@ -149,16 +159,15 @@ class ff_mailform extends flatframe
     // ========== do_submit
     public function do_submit()
     {
-
         // varidation
-        require_once 'exvalidator.php';
+        require_once 'Exvalidator.php';
         $validate_array = array();
         foreach ($this->_ff_config['form'] as $k => $v) {
             if ($v['validate']) {
                 $validate_array['form'][$k] = $v['validate'];
             }
         }
-        $validator = new validator($validate_array, $this->q);
+        $validator = new Exvalidator($validate_array, $this->q);
         // 入力値チェック
         $result = $validator->check('form');
         if ($validator->has_error()) {
@@ -231,8 +240,8 @@ class ff_mailform extends flatframe
             $this->template->assign(array('form_attach' => 1));
         }
         // jquery validate
-        require_once 'exvalidator.php';
-        $validator = new validator($validate_array, $this->q);
+        require_once 'Exvalidator.php';
+        $validator = new Exvalidator($validate_array, $this->q);
         $js_text = $validator->convert_jquery_validate($this->_ff_config['form_id_name']);
         $this->template->assign(array('js_text' => $js_text));
 
@@ -284,7 +293,6 @@ class ff_mailform extends flatframe
     // ========== _swiftmail メール送信
     public function _swiftmail($mix = array())
     {
-
             // 'to'          => $to,
             // 'from'        => $from,
             // 'from_name'   => $this->_ff_config['from_name'] ,
@@ -295,32 +303,57 @@ class ff_mailform extends flatframe
             // 'mailtext'    => $mailtext,
             // 'attach_file' => $attach_file,
 
-        if (strcmp($this->_ff_config['mail_method'], 'smtp') != 0) {
-            die('エラー : 設定ファイルの「メール送信方式」が smtp 以外になっています。smtpにしてサーバ情報を設定してください。');
+        if ( (! $this->_ff_config['mail_method']=='sendmail') && (! $this->_ff_config['mail_method']=='smtp') ) {
+            die('エラー : 設定ファイルの「メール送信方式( mail_method )」が sendmail,smtp 以外になっています。正しくサーバ情報を設定してください。');
         }
 
-        $transport = (new Swift_SmtpTransport($this->_ff_config['SMTP_host'], $this->_ff_config['SMTP_port']))
-            ->setUsername($this->_ff_config['SMTP_user'])
-            ->setPassword($this->_ff_config['SMTP_pass'])
-            ;
- 
+        $transport = null;
+
+        // sendmail
+        if ( $this->_ff_config['mail_method']=='sendmail' ) {
+            if ( ! @$this->_ff_config['sendmail_command']=='sendmail' ) {
+                die('エラー : 設定ファイルの「sendmailコマンド( mail_method )」が設定されていません。');
+            }
+            $transport = new Swift_SendmailTransport( $this->_ff_config['sendmail_command'] );
+        }
+        // smtp
+        elseif ( $this->_ff_config['mail_method']=='smtp' ) {
+            $smtp_option = null;
+            if ( @$this->_ff_config['SMTP_option'] == 'auto' ){
+                if ( @$this->_ff_config['SMTP_port'] == 465 ){
+                    $ssl_flag = 'ssl';
+                }
+                elseif ( @$this->_ff_config['SMTP_port'] == 587 ){
+                    $ssl_flag = 'tls';
+                }
+            }
+            else {
+                $smtp_option = $this->_ff_config['SMTP_option'];
+            }
+            if ( @$this->_ff_config['SMTP_port'] == 465 ){ $ssl_flag = 'ssl'; }
+            $transport = (new Swift_SmtpTransport($this->_ff_config['SMTP_host'], $this->_ff_config['SMTP_port'], $smtp_option))
+                ->setUsername($this->_ff_config['SMTP_user'])
+                ->setPassword($this->_ff_config['SMTP_pass']);
+        }
+
         $mailer = new Swift_Mailer($transport);
 
         // 添付ファイル（全ての添付を処理する）
+        $attachment = [];
         if ( isset($mix['attach_file']) ){
             foreach ($mix['attach_file'] as $k => $v) {
                 $file_full_path    = $v[4];
                 $file_name         = $v[0];
                 $file_content_type = $v[1];
 
-                $attachment = \Swift_Attachment::fromPath( $file_full_path )
+                $attachment[$k] = \Swift_Attachment::fromPath( $file_full_path )
                 ->setFilename( $file_name )
                 ->setContentType( $file_content_type );
             }
         }
 
         $message = (new \Swift_Message('My important subject here'))
-            ->setFrom([$mix['from'] => $mix['from_name']])
+            ->setFrom([$mix['from'] => @$mix['from_name']])
             ->setTo( $mix['to'] )
             ->setSubject( $mix['subject'] )
             ->setBody( $mix['mailtext']);    // , 'text/html'
@@ -331,11 +364,32 @@ class ff_mailform extends flatframe
         }
 
         // 添付ファイルがある場合はセット
-        if ( isset($mix['attach_file']) ){
-            $message->attach($attachment);
+        // if ( count(@$mix['attach_file']) > 0 ){
+        //     foreach ($mix['attach_file'] as $k => $v) {
+        //         $message->attach($attachment);
+        //     }
+        // }
+        if ( count(@$attachment) > 0 ){
+            foreach ($attachment as $k => $v) {
+                $message->attach($v);
+            }
         }
 
-        $result = $mailer->send($message);
+
+        $result = null;
+
+        try {
+            $result = $mailer->send($message);
+        } catch (\Exception $e) {
+            ini_set( 'display_errors', "1" );
+            error_reporting(E_ALL ^ E_NOTICE);
+print <<< DOC_END
+<h1>メール送信にてエラーが発生いたしました。</h1>
+<h2>エラーメッセージの内容</h2>
+DOC_END;
+            echo '<small>' .  $e->getMessage() . "</small>\n";
+            die;
+        }
 
         return $result;
 
@@ -382,13 +436,13 @@ class ff_mailform extends flatframe
         // メール本文エンコード
         $mailtext = $mix['mailtext'];
         $mailtext = str_replace("\r", "\n", str_replace("\r\n", "\n", $mailtext));
-$this->dump($mailtext); die;
+
         $mailtext = mb_convert_encoding($mailtext, 'ISO-2022-JP', 'UTF-8');
 
         // 添付ファイルがある場合はmime
         if (is_array(@$mix['attach_file'])) {
 
-$this->dump($this->q); die;
+
             require_once 'Mail/mime.php';
 
             $mime = new Mail_Mime("\n");  //改行コードをセット
@@ -447,6 +501,66 @@ $this->dump($this->q); die;
         $from = $this->q['email'];
         $to = $this->_ff_config['site_to'];
 
+        // subjet に日付を追加
+        $site_subject_date = null;
+        if ( @$this->_ff_config['site_date_format'] ){
+            date_default_timezone_set('Asia/Tokyo');
+            setlocale(LC_TIME, 'ja_JP.utf8');
+            $dt = new \Carbon\Carbon();
+            $site_subject_date = \Carbon\Carbon::now()->format( $this->_ff_config['site_date_format'] );
+            $subject = str_replace("{date}", $site_subject_date, $subject);
+            // $this->dump( $subject );
+        }
+
+        // subject に count を追加
+        require_once 'textdb.php';
+        $count_dt = new textdb("./phplib/mailform/textdb.yml", "count", $this->_ff_config['data_dir'], 'cgi');
+        $count_hash = $count_dt->select_one(array(
+            'id' => 1 ,
+        ));
+        $now_count = (int)@$count_hash['count_no'] + 1;
+
+        //日毎の連番
+        $now_count_dayno = null;
+        if ( ! isset($count_hash['id']) ){
+        	$now_count_dayno = 1; 		// データがないときは1
+        } else {
+        	$dt_data = new \Carbon\Carbon( $count_hash['updated_at'] );
+        	$dt_now  = new \Carbon\Carbon();
+        	// $this->dump( $dt_data->format("Ymd") ); $this->dump( $dt_now->format("Ymd") );
+        	if ( $dt_data->format("Ymd") == $dt_now->format("Ymd") ){
+        		$now_count_dayno = (int)@$count_hash['count_dayno'] + 1;
+        	}
+    		else {
+        		$now_count_dayno = 1;
+    		}
+        }
+
+        // データがないときは新規作成
+        if ( ! isset($count_hash['id']) ){
+            $count_dt->insert(array(
+				'count_no'    => 1 ,
+				'count_dayno' => 1 ,
+				'updated_at'  => new \Carbon\Carbon() ,
+            ));
+        }
+        // あるときは update
+        else {
+            $count_dt->update(array(
+				'id'          => 1 ,
+				'count_no'    => $now_count ,
+				'count_dayno' => $now_count_dayno ,
+				'updated_at'  => new \Carbon\Carbon() ,
+            ));
+        }
+
+        // subject を置換
+        $subject = str_replace("{no}", sprintf("%06d",$now_count), $subject);
+        $subject = str_replace("{dayno}", sprintf("%02d",$now_count_dayno), $subject);
+
+        // $this->dump( $now_count ); $this->dump( $now_count_dayno ); $this->dump( $subject ); die;
+
+
         // 送信者情報
         require_once 'exdate.php';
         $t = new exdate();
@@ -478,11 +592,12 @@ $this->dump($this->q); die;
             }
         }
 
+
         $rt = $this->_swiftmail(array(
             'to'          => $to,
             'from'        => $from,
             // 'from'        => $to,
-            'from_name'   => $this->_ff_config['site_name'] ,
+            // 'from_name'   => $this->_ff_config['site_name'] ,
             'subject'     => $subject,
             'cc'          => $this->_ff_config['site_cc'],
             'bcc'         => $this->_ff_config['site_bcc'],

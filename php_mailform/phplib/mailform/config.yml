@@ -1,6 +1,6 @@
 
 # ===================================================================================
-# config.yml 　The MIT License　(c)2019 econosys system  https://econosys-system.com/
+# config.yml 　The MIT License　(c)2020 econosys system  https://econosys-system.com/
 # ===================================================================================
 
 
@@ -10,10 +10,11 @@
 
 # 担当者設定
 site_name        : 【テスト会社名】                       # メール送信者（ユーザーへのメールの送信者）
-site_to          : name@YOUR-SERVER.COM                 # お問い合わせフォーム受信担当者メールアドレス
+site_to          : test@YOUR-SERVER.com                 # お問い合わせフォーム受信担当者メールアドレス
 site_cc          :                                      # 担当者CC
 site_bcc         :                                      # 担当者BCC
-site_subject     : ホームページよりお問い合わせがありました  # 担当者向けメールのタイトル
+site_subject     : ホームページよりお問合せ {date}{dayno}  # 担当者向けメールのタイトル {date} は日付に変換されます。 {no} は 6桁の番号に変換されます。　{dayno} は 日ごとの連番に変換されます。
+site_date_format : Ymd                                  # {date} のフォーマット。（ 例 Y年m月d日 H:i:s  → 2019年12月02日 11:05:59 ）（ 例 Ymd  → 20191202 ）
 site_replyto     :                                      # 返信先を別アドレスに設定したい時（通常は設定しなくてOK）
 
 
@@ -21,14 +22,27 @@ site_replyto     :                                      # 返信先を別アド�
 user_subject : お問い合わせありがとうございます | 【テスト会社名】   # お客様向けメールのタイトル
 
 
-# メール送信方式 (smtp必須となりました)
-mail_method : smtp
+
+# メール送信方式 ( sendmail または smtp )（ smtp推奨 ）
+mail_method : sendmail
+
+# sendmailコマンド設定（メール送信方式が sendmail の時に必要）
+sendmail_command : '/usr/sbin/sendmail -t'
 
 # SMTP（メール送信サーバ）設定（メール送信方式が smtp の時に必要）
-SMTP_host  : YOUR-SERVER.COM
-SMTP_port  : 587
-SMTP_user  : name@YOUR-SERVER.COM
-SMTP_pass  : PASSWORD
+SMTP_host   : YOUR-SERVER.COM
+SMTP_port   : 587
+SMTP_option : auto                                 # ssl , tls または auto （ 通常は auto としてください。　明示的に指定する場合は ssl , tls を指定してください。 ）
+SMTP_user   : name@YOUR-SERVER.COM
+SMTP_pass   : PASSWORD
+
+# Gmail SMTPを使用する場合の設定
+# SMTP_host   : smtp.gmail.com
+# SMTP_port   : 587
+# SMTP_option : auto
+# SMTP_user   : <Gmailのメールアドレス>
+# SMTP_pass   : <Gmailの2段階認証アプリパスワード>   # 「Googleアカウント」 →「セキュリティ」→「Googleへのログインのアプリパスワード」から設定できます
+
 
 # メール送信完了画面（メール送信後この画面にリダイレクトします。）
 end_html   : php_mailform_end.html
@@ -111,6 +125,17 @@ form :
       NOT_BLANK   : メールアドレスを入力してください。
       EMAIL       : メールアドレスの形式が正しくありません。
 
+  email_confirm :
+    title_mail : メールアドレス（確認）
+    title_html : メールアドレス（確認） ※
+    placeholder: メールアドレス（確認）
+    class      :
+    input_type : email # text, number, email, tel, password, select, checkbox, textarea, radio, file から選択。未指定時は「text」
+    validate   :
+      NOT_BLANK        : メールアドレス（確認）を入力してください。
+      DUPLICATION,email: メールアドレスとメールアドレス（確認）が一致しません
+
+
   postal :
     title_mail : 郵便番号
     title_html : 郵便番号
@@ -155,7 +180,7 @@ form :
         name  : 種類 4
         value : 種類 4
     validate:
-      CHECKBOX_NOT_BLANK: お問合せの種類を選択してください。
+      NOT_BLANK: お問合せの種類を選択してください。
 
   otoiawase_b :
     title_mail : お問合せ内容
@@ -173,6 +198,22 @@ form :
     validate  :
 
 
+  henshin :
+    title_mail  : 返信の方法
+    title_html  : 返信の方法
+    input_type  : checkbox    # text, number, email, tel, password, select, checkbox, textarea, radio, file から選択。未指定時は「text」
+    input_values:
+      -
+        name  : e-mail
+        value : e-mail
+      -
+        name  : 電話
+        value : 電話
+      -
+        name  : LINE
+        value : LINE
+    validate:
+      CHECKBOX_NOT_BLANK: ご希望返信の方法に1つ以上チェックをつけてください。
 
 
 
@@ -195,4 +236,9 @@ httpheader_encoding: UTF-8
 # エラー出力設定【1】全てのエラーを出力  【0】通知エラー以外の全てのエラーを出力  【-1】通知エラー警告エラー以外の全てのエラーを出力
 # ここのエラー設定で /var/log/httpd/.... のエラーログにも出力されなくなるので注意
 errorReporting: 0
+
+# カウンターファイルの保存場所
+data_dir: ./data/
+
+
 

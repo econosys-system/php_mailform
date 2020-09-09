@@ -1,33 +1,33 @@
 # ● php mailformのライセンス
-php mailform はフリーソフトです。（MITライセンス）    
-MITライセンスのもと、どなたでも自由に仕様、改変、再配布することができます。  
-商用利用もOKです。  
-動作にはPHP7以上が必要です。(PHPH 5.6以下では動作致しません。)  
+php mailform はフリーソフトです。（MITライセンス）
+MITライセンスのもと、どなたでも自由に仕様、改変、再配布することができます。
+商用利用もOKです。
+動作にはPHP7以上が必要です。(PHPH 5.6以下では動作致しません。)
 
 
 
 
 # ● php mailformの設置方法
 
-mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」フォルダが生成されます。  
-  
-**1.**「php_mailform」フォルダごとお使いのWEBサーバにFTPアップロードします。  
-**2.** ファイル「php_mailform/phplib/mailform/config.yml」のパーミッションを <b>600</b> にします。  
-**3.** ブラウザに　http://設置したサーバー名/php_mailform/php_mailform.php と入力してアクセスします。  
+mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」フォルダが生成されます。
+
+**1.**「php_mailform」フォルダごとお使いのWEBサーバにFTPアップロードします。
+**2.** ファイル「php_mailform/phplib/mailform1/config.yml」のパーミッションを <b>600</b> にします。
+**3.** ブラウザに　http://設置したサーバー名/php_mailform/php_mailform.php と入力してアクセスします。
 
 
 
 
 # ● php mailformの設定方法
 
-ファイルをアップロードしただけでは使用できません。設定ファイルを開いて適宜設定を変更して下さい。  
-  
-<b>設定ファイル「php_mailform/phplib/mailform/config.yml」</b>    
-  
-**1.** config.ymlの【メールの設定】項目を設定して下さい。  
-**2.** config.ymlの【フォームの設定】項目を設定して下さい。  
-  
-設定が完了した config.yml はサーバ上のものと置き換えて下さい。  
+ファイルをアップロードしただけでは使用できません。設定ファイルを開いて適宜設定を変更して下さい。
+
+<b>設定ファイル「php_mailform/phplib/mailform/config.yml」</b>
+
+**1.** config.ymlの【メールの設定】項目を設定して下さい。
+**2.** config.ymlの【フォームの設定】項目を設定して下さい。
+
+設定が完了した config.yml はサーバ上のものと置き換えて下さい。
 
 
 
@@ -83,10 +83,10 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
     validate   :
       NOT_BLANK  : お名前を入力してください。
 ```
-  
-         
-    
-  
+
+
+
+
 ・チェックボックスやラジオボタンを入力必須にする
 
 ```
@@ -94,7 +94,7 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
             CHECKBOX_NOT_BLANK: お問合せの種類を選択してください。
 ```
 
-エラーメッセージは適宜書き換えてください。  
+エラーメッセージは適宜書き換えてください。
 
 
 
@@ -138,10 +138,10 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
 
 
 #  ● お問合せ
-本ソフトウェアについての質問・バグ報告・要望などございましたら  
-<a class="md" href="https://econosys-system.com/contact.php">こちらのお問い合わせフォーム</a>  
+本ソフトウェアについての質問・バグ報告・要望などございましたら
+<a class="md" href="https://econosys-system.com/contact.php">こちらのお問い合わせフォーム</a>
 からなんなりとお問い合わせ下さい。
 
 #  ● 公式サイト
-[php_mailform](https://econosys-system.com/freesoft/php_mailform.html)
+[無料のメールフォームPHP php_mailform](https://econosys-system.com/freesoft/php_mailform.html)
 

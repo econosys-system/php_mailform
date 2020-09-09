@@ -1,0 +1,20 @@
+
+
+count:
+    charset : UTF-8
+    desc    : 
+        -
+           - id
+           - int
+        -
+           - count_no
+           - int
+        -
+           - count_dayno
+           - int
+        -
+           - updated_at
+           - char
+
+
+
