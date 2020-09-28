@@ -25,6 +25,7 @@
 // Version 1.32  ：[add] {dayno}を追加
 // Version 1.33  ：[add] smtp時エラーとなる現象を修正 , エラーメッセージ修正
 // Version 1.34  ：[fix] TMPフォルダない時自動作成
+// Version 1.37  ：[add] ユーザーへの控えを送信しないモード追加
 
 
 require_once dirname(__FILE__).'/../flatframe.php';
@@ -51,22 +52,18 @@ class ff_mailform extends flatframe
     }
 
 
-    // ========== app_prerun：前処理
     public function app_prerun()
     {
     }
 
 
-    // ========== app_postrun：後処理
     public function app_postrun()
     {
     }
 
 
-    // ========== do_input
     public function do_input()
     {
-
         $hidden = '<input type="hidden" name="cmd" value="confirm">';
         $this->template->assign(array('hidden' => $hidden));
 
@@ -88,7 +85,7 @@ class ff_mailform extends flatframe
         print $output;
     }
 
-    // ========== do_confirm
+
     public function do_confirm()
     {
         // attach_file
@@ -155,8 +152,6 @@ class ff_mailform extends flatframe
     }
 
 
-
-    // ========== do_submit
     public function do_submit()
     {
         // varidation
@@ -192,14 +187,18 @@ class ff_mailform extends flatframe
         }
 
         $mail_common = $this->_make_mail_common();
+
         $rt_shop = $this->_mail_to_site($mail_common);
-        $rt_customer = $this->_mail_to_customer($mail_common);
 
         if (!$rt_shop) {
             die("管理者へのメール送信ができませんでした。こちらからお問い合わせください。{$CONFIG['to_admin']}");
         }
-        if (!$rt_customer) {
-            die("お客様へのメール送信ができませんでした。こちらからお問い合わせください。{$CONFIG['to_admin']}");
+
+        if ( @$this->_ff_config['ignore_user_mail'] == 0 ){
+            $rt_customer = $this->_mail_to_customer($mail_common);
+            if (!$rt_customer) {
+                die("お客様へのメール送信ができませんでした。こちらからお問い合わせください。{$CONFIG['to_admin']}");
+            }
         }
 
         if (strcmp($this->_ff_config['end_html'], '') == 0) {
@@ -208,6 +207,7 @@ class ff_mailform extends flatframe
             header("Location: {$this->_ff_config['end_html']}");
         }
     }
+
 
     // ========== _make_mail_form_table
     public function _make_mail_form_table()
@@ -248,6 +248,7 @@ class ff_mailform extends flatframe
         return $this->template->fetch('table.html');
     }
 
+
     // ========== _make_mail_form_table_confirm
     public function _make_mail_form_table_confirm()
     {
@@ -263,6 +264,7 @@ class ff_mailform extends flatframe
 
         return $this->template->fetch('table_confirm.html');
     }
+
 
     // ========== _make_mail_common
     public function _make_mail_common()
@@ -357,6 +359,13 @@ class ff_mailform extends flatframe
             ->setTo( $mix['to'] )
             ->setSubject( $mix['subject'] )
             ->setBody( $mix['mailtext']);    // , 'text/html'
+
+        if ( @$mix['cc'] ){
+            $message->setCc($mix['cc']);
+        }
+        if ( @$mix['bcc'] ){
+            $message->setBcc($mix['bcc']);
+        }
 
         // replytoがある場合はセット（管理者へ送信する場合）
         if ( isset($mix['replyto']) ){
@@ -493,6 +502,7 @@ DOC_END;
         }
     }
 
+
     // ========== _mail_to_site （サイト管理者へメール送信）
     public function _mail_to_site($mail_common = '')
     {
@@ -592,22 +602,25 @@ DOC_END;
             }
         }
 
-
-        $rt = $this->_swiftmail(array(
+        $mail_hash = [
             'to'          => $to,
             'from'        => $from,
-            // 'from'        => $to,
-            // 'from_name'   => $this->_ff_config['site_name'] ,
             'subject'     => $subject,
             'cc'          => $this->_ff_config['site_cc'],
             'bcc'         => $this->_ff_config['site_bcc'],
-
-            // 'replyto'     => $this->_ff_config['site_replyto'],
             'replyto'     => $from,
-
             'mailtext'    => $mailtext,
             'attach_file' => $attach_file,
-        ));
+        ];
+
+        if ( $this->_ff_config['site_cc'] ){
+            $mail_hash['cc'] = $this->_ff_config['site_cc'];
+        }
+        if ( $this->_ff_config['site_bcc'] ){
+            $mail_hash['bcc'] = $this->_ff_config['site_bcc'];
+        }
+
+        $rt = $this->_swiftmail($mail_hash);
 
         return $rt;
     }

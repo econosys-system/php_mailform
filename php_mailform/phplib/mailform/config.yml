@@ -22,6 +22,10 @@ site_replyto     :                                      # 返信先を別アド�
 user_subject : お問い合わせありがとうございます | 【テスト会社名】   # お客様向けメールのタイトル
 
 
+# ユーザーへ確認メールを送信しない（ 0:ユーザーへメール送信する（デフォルト） 1:ユーザーへメール送信しない ）
+ignore_user_mail : 0
+
+
 
 # メール送信方式 ( sendmail または smtp )（ smtp推奨 ）
 mail_method : sendmail

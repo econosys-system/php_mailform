@@ -32,6 +32,38 @@ mailform_version_x.xx.zip を解凍ソフトで解凍すると「php_mailform」
 設定が完了した config.yml はサーバ上のものと置き換えて下さい。
 
 
+## 1. メールの設定について
+
+###＊複数の to にメールを送信する場合
+
+**config.yml** の
+
+```
+site_to: test@YOUR-SERVER.com
+```
+
+　　↓
+
+```
+site_to: 
+    - test@YOUR-SERVER.com
+    - sub@YOUR-SERVER.com
+```
+
+のように **YAMLの配列記法**で記述してください。
+
+
+###＊ユーザーに確認メールを送信しない場合
+
+```
+# ユーザーに確認メールを送信しない
+ignore_user_mail : 1
+```
+
+としてください。
+
+
+
 
 <br>
 
