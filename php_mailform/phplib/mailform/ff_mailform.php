@@ -26,6 +26,7 @@
 // Version 1.33  ：[add] smtp時エラーとなる現象を修正 , エラーメッセージ修正
 // Version 1.34  ：[fix] TMPフォルダない時自動作成
 // Version 1.37  ：[add] ユーザーへの控えを送信しないモード追加
+// Version 1.38  ：[fix] ドキュメント修正
 
 
 require_once dirname(__FILE__).'/../flatframe.php';
