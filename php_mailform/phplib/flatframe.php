@@ -2,8 +2,8 @@
 
 /*
     flatframe.php
-    copyright (c)2002-2017 econosys system
-    http://econosys-system.com/
+    copyright (c)2002-2021 econosys system
+    https://econosys-system.com/
 
     The MIT License (MIT)
 
@@ -60,7 +60,7 @@ if (is_file(dirname(__FILE__).DIRECTORY_SEPARATOR.'flatframe'.DIRECTORY_SEPARATO
 class flatframe
 {
     public $version = '0.30';
-    public $notice = 'flatframe.php  copyright (c)econosys system  http://econosys-system.com/  Under The MIT License (MIT)';
+    public $notice = 'flatframe.php  copyright (c)econosys system  https://econosys-system.com/  Under The MIT License (MIT)';
     public $template;
     public $dsn;
     public $db;

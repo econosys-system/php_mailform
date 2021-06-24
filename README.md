@@ -126,7 +126,7 @@ php_mailform/phplib/mailform/config.yml
 | validate   |フォームの入力値チェックを選択|
 
 
-<br>
+<br><br>
 
 ## ＊ フォーム項目を必須項目にするには下記を追加して下さい。
 
@@ -150,14 +150,36 @@ php_mailform/phplib/mailform/config.yml
 エラーメッセージは適宜書き換えてください。
 
 
-<br>
-
+<br><br>
 ## ＊ フォーム項目の必須項目をやめて任意入力項目にするには次の行を削除して下さい
 
 ```
       NOT_BLANK  : お名前を入力してください。
 ```
 (↑ この上の1行を削除すると任意入力項目となります)
+
+
+
+<br><br>
+
+
+## ＊ 複数の添付ファイルを送信したい場合は設定ファイルに次の行を追加してください
+
+**設定ファイル**
+
+```
+php_mailform/phplib/mailform/config.yml
+```
+
+
+```
+  my_attach_2 :
+    title_mail: 添付ファイル2
+    title_html: 添付ファイル2
+    placeholder: ファイルを選択
+    input_type: file    # text, number, email, tel, password, select, checkbox, textarea, radio, file から選択。未指定時は「text」
+    validate  :
+```
 
 
 
