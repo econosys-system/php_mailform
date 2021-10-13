@@ -1,8 +1,10 @@
+<?php /* Smarty version 2.6.30, created on 2021-10-13 08:43:20
+         compiled from mail_form_confirm.html */ ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>PHPメールフォームサンプル</title>
+<title>PHPメールフォーム・入力内容の確認</title>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.2/cerulean/bootstrap.min.css">
 <link href="css/parts.css" rel="stylesheet">
@@ -15,8 +17,6 @@
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="js/jquery.btnclick.js"></script>
-{if $config__beforeunload_js}<script src="js/beforeunload.js"></script>
-{/if}
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -37,23 +37,18 @@
 
 <div class="row">
 	<div class="col-xs-12">
-	<h1 class="h3 lc01 ml13">PHPメールフォームサンプル</h1>
+	<h1 class="h3 lc01 ml13">PHPメールフォームサンプル・入力内容の確認</h1>
 	</div>
 </div>
 
-	{$mail_form_table}
 
-	<footer>
-	<div class="row">
-	<div class="col-sm-12">
-	<div class="pull-right"><a class="lc01" href="https://econosys-system.com/freesoft/php_mailform.html" target="_blank" style="font-size:13px; color:rgba(255,255,255,.8);">php mailform</a></div>
-	</div>
-	</div>
-	</footer>
+  <?php echo $this->_tpl_vars['mail_form_table_confirm']; ?>
 
-</div>
+
+</div><!-- [.container] -->
+
+
 
 </body>
 </html>
-
-<!-- mail_form.html -->
+<!-- mail_form_confirm.html -->

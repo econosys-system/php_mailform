@@ -10,10 +10,10 @@
 <dd>
 { if is_array($q[$k]) }
 	{ if  $q[$k].uploaded_basename }
-		{ assign var="f" value=$q[$k] }{ $f.name }
+		{ assign var="f" value=$q[$k] }{ $f.name|escape } 
 	{ else }
 		{ foreach from=$q[$k] item="vvv" }
-			<div class="checkbox_item">{ $vvv }</div>
+			<div class="checkbox_item">{ $vvv|escape }</div>
 		{ /foreach }
 	{ /if }
 { else }

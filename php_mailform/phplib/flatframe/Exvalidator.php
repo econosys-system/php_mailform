@@ -2,24 +2,11 @@
 
 /*
 exvalidator.php
-copyright (c)2002-2020 econosys system
+copyright (c)2002-2021 econosys system
 https://econosys-system.com/
 
 The MIT License (MIT)
 
-Version 1.01 メールアドレスの検知方法を修正
-Version 1.02 CHECKBOX_NOT_BLANK の追加
-Version 1.03 CHECKBOX_NOT_BLANK の修正
-Version 1.04 CHECKBOX_NOT_BLANK の修正
-Version 1.06 convert_jquery_validate()追加
-Version 1.07 bug-fix
-Version 1.08 bug-fix
-Version 1.09 コンストラクタでyaml以外に array()も受けられるように
-Version 1.10 convert_jquery_validate() のbug-fix
-Version 1.11 eregを使用しないように
-Version 1.12 Strict Standards: Only variables should be passed by reference エラーへの対応
-Version 2.00 PHP7対応
-Version 2.01 jquery.validate エラーメッセージ日本語対応
 Version 3.00 クラス名変更
 Version 3.01 バリデーション方式 RANGE, RANGELENGTH を追加（ convert_jquery_validate()のみ ）
 Version 3.02 バリデーション方式 NOT_BLANK のときに 特定の値があるかどうかチェックするオプションを渡せるように。

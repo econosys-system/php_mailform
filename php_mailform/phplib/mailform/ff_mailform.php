@@ -27,7 +27,7 @@
 // Version 1.34  ：[fix] TMPフォルダない時自動作成
 // Version 1.37  ：[add] ユーザーへの控えを送信しないモード追加
 // Version 1.38  ：[fix] ドキュメント修正
-// Version 1.39  ：[fix] ドキュメント追記
+// version 1.40  ：[fix] ドキュメント追記
 
 
 require_once dirname(__FILE__).'/../flatframe.php';

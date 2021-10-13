@@ -1,6 +1,6 @@
 
 # ===================================================================================
-# config.yml 　The MIT License　(c)2020 econosys system  https://econosys-system.com/
+# config.yml 　The MIT License　(c)2021 econosys system  https://econosys-system.com/
 # ===================================================================================
 
 
@@ -208,8 +208,8 @@ form :
     input_type  : checkbox    # text, number, email, tel, password, select, checkbox, textarea, radio, file から選択。未指定時は「text」
     input_values:
       -
-        name  : e-mail
-        value : e-mail
+        name  : xss
+        value : <script>alert('checkbox')</script>
       -
         name  : 電話
         value : 電話

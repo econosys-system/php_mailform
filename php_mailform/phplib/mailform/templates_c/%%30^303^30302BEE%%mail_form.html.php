@@ -1,3 +1,5 @@
+<?php /* Smarty version 2.6.30, created on 2021-10-13 08:53:56
+         compiled from mail_form.html */ ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -15,8 +17,8 @@
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="js/jquery.btnclick.js"></script>
-{if $config__beforeunload_js}<script src="js/beforeunload.js"></script>
-{/if}
+<?php if ($this->_tpl_vars['config__beforeunload_js']): ?><script src="js/beforeunload.js"></script>
+<?php endif; ?>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -41,7 +43,8 @@
 	</div>
 </div>
 
-	{$mail_form_table}
+	<?php echo $this->_tpl_vars['mail_form_table']; ?>
+
 
 	<footer>
 	<div class="row">
