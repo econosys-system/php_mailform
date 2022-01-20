@@ -221,7 +221,7 @@ php_mailform/phplib/mailform/config.yml
  **費用は 6,600円（税込） / 1メールフォームあたり**
   
 あわせてメールフォームに何か機能を追加されたい場合は追加でお見積もいたします。  
-<a class="md" href="https://econosys-system.com/contact.php">お問い合わせフォーム</a>
+<a class="md" href="https://econosys-system.com/contact">お問い合わせフォーム</a>
 からサーバ情報とともにお申し込みください。  
 
 
@@ -229,7 +229,7 @@ php_mailform/phplib/mailform/config.yml
 <br><br>
 # ● カスタマイズサービス（有料）
 自社サイト用などにカスタマイズしたフォームを作りたい場合はご要件をお聞きしてカスタマイズしたメールフォームを制作いたします。  
-<a class="md" href="https://econosys-system.com/contact.php">お問い合わせフォーム</a>
+<a class="md" href="https://econosys-system.com/contact">お問い合わせフォーム</a>
 から詳しい内容を記述の上お問合せください。
 
 
@@ -237,12 +237,12 @@ php_mailform/phplib/mailform/config.yml
 <br><br>
 #  ● お問合せ
 本ソフトウェアについての質問・バグ報告・要望などございましたら
-<a class="md" href="https://econosys-system.com/contact.php">こちらのお問い合わせフォーム</a>
+<a class="md" href="https://econosys-system.com/contact">こちらのお問い合わせフォーム</a>
 からなんなりとお問い合わせ下さい。
 
 
 
 <br><br>
 #  ● 公式サイト
-[無料のメールフォームPHP php_mailform](https://econosys-system.com/freesoft/php_mailform.html)
+[無料のメールフォームPHP php_mailform](https://econosys-system.com/freesoft/php-mailform)
 
